@@ -1,0 +1,18 @@
+<html lang="en">
+	<head>
+		<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="static/js/lookup.js"></script>
+	</head>
+	<div class="container">
+		<form action="/summoner" method="get" role="form">
+			<h2>Enter your summoner name below</h2>
+			<input type="text" id="summoner-name" name="summoner" placeholder="Doublelift" required autofocus />
+			<button class="btn btn-lg btn-primary btn-block" type="button">Search</button>
+		</form>
+	</div>
+	<div class="container">
+		<h2>Summoner JSON Data</h2>
+		<div id="response"></div>
+	</div>
+</html>
