@@ -35,10 +35,9 @@ function searchMatches(summonerID) {
 		success: function(response) {
 			//JSON object contains list of ranked games user has played
 			var matchJSON = $.parseJSON(response);
-			console.log(matchJSON);
-		//	for (index in matchJSON.matches) {
-		//		findMatchDetail(matches[index].matchID);
-			//}
+			for (index in matchJSON.matches) {
+				findMatchDetail(matchJSON.matches[index].matchId);
+			}
 		},
 		error: function(error) {
 			errorOutput(error);
@@ -47,7 +46,6 @@ function searchMatches(summonerID) {
 }
 
 function findMatchDetail(matchID) {
-	console.log('Match ID: ' + matchID);
 	var jsonMatch = {'matchid' : matchID};
 	$.ajax({
 		url: '/matchdetail',
