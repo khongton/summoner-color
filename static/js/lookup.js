@@ -1,3 +1,6 @@
+var summonerName = '';
+var participantID = null;
+var playerFrames = []
 $(function() {
 	$('button').click(function() {
 		searchSummoner();
@@ -5,9 +8,8 @@ $(function() {
 });
 
 
-//I'm making a lot of AJAX calls - maybe template them or something
 function searchSummoner() {
-	var summonerName = $('#summoner-name').val();
+	summonerName = $('#summoner-name').val();
 	$.ajax({
 		url: '/summoner-search',
 		data: $('form').serialize(),
@@ -25,7 +27,6 @@ function searchSummoner() {
 }
 
 function searchMatches(summonerID) {
-	console.log(summonerID);
 	var jsonID = {'summonerid' : summonerID};
 	$.ajax({
 		url: '/matchlist',
@@ -53,7 +54,16 @@ function findMatchDetail(matchID) {
 		contentType: 'application/json;charset=UTF-8',
 		type: 'POST',
 		success: function(response) {
-			console.log(response);
+			var detail = $.parseJSON(response);
+			for (player in detail.participantIdentities) {
+				if (detail.participantIdentities[player].player.summonerName === summonerName) {
+					participantID = detail.participantIdentities[player].participantId;
+				}
+			}			
+			for (frame in detail.timeline.frames) {
+				playerFrames.push(detail.timeline.frames[frame].participantFrames[participantID]);
+			}
+			console.log(playerFrames.length);
 		},
 		error: function(error) {
 			errorOutput(error);

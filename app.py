@@ -23,7 +23,7 @@ def lookup():
 @app.route("/matchlist", methods=['POST'])
 def matchLookup():
 	match = str(request.json['summonerid']) + '?'
-	filterMatchIndices = 'beginIndex=0&endIndex=5&'
+	filterMatchIndices = 'beginIndex=0&endIndex=1&'
 	url = config.baseurl + config.apis['matchlist'] + match + filterMatchIndices + config.apikey
 	response = requests.get(url)
 	return json.dumps(response.json())
@@ -31,7 +31,8 @@ def matchLookup():
 @app.route("/matchdetail", methods=['POST'])
 def matchDetails():
 	matchID = str(request.json['matchid']) + '?'
-	url = config.baseurl + config.apis['matchdetail'] + matchID + config.apikey
+	includeTimeline = 'includeTimeline=true&'
+	url = config.baseurl + config.apis['matchdetail'] + matchID + includeTimeline + config.apikey
 	response = requests.get(url)
 	return json.dumps(response.json())
 
