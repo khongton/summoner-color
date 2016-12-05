@@ -6,12 +6,19 @@ $(function() {
 	$('button').click(function() {
 		playerFrames = [];
 		searchSummoner();
+		drawGraph();
 	});
 });
 
-$(document).ajaxStop(function() {
-	var data = formatData();
-	var graph = d3.select('#graph'),
+
+function drawGraph() {
+	if ($.trim($('svg').html() !== '')) {
+		$('svg').empty();
+	}
+
+	$(document).ajaxStop(function() {
+		var data = formatData();
+		var graph = d3.select('#graph'),
 		WIDTH = 1000,
 		HEIGHT = 500,
 		MARGINS = {
@@ -32,14 +39,14 @@ $(document).ajaxStop(function() {
 		})]),
 		xAxis = d3.axisBottom().scale(xRange).tickSize(1),
 		yAxis = d3.axisLeft().scale(yRange);
-	var lineFunction = d3.line().x(function(data) { return xRange(data.x);}).y(function(data) { return yRange(data.y);})
+		var lineFunction = d3.line().x(function(data) { return xRange(data.x);}).y(function(data) { return yRange(data.y);})
 
-	//These two lines attach the graph to our HTML document
-	graph.append('svg:g').attr('class', 'x-axis').attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')').call(xAxis);
-	graph.append('svg:g').attr('class', 'y-axis').attr('transform', 'translate(' + (MARGINS.left) + ',0)').call(yAxis);
-	graph.append('svg:path').attr('d', lineFunction(data)).attr('stroke', 'blue').attr('stroke-width', 2).attr('fill', 'none');
-});
-
+		//These two lines attach the graph to our HTML document
+		graph.append('svg:g').attr('class', 'x-axis').attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')').call(xAxis);
+		graph.append('svg:g').attr('class', 'y-axis').attr('transform', 'translate(' + (MARGINS.left) + ',0)').call(yAxis);
+		graph.append('svg:path').attr('d', lineFunction(data)).attr('stroke', 'blue').attr('stroke-width', 2).attr('fill', 'none');
+	});
+}
 function formatData() {
 	var data = []
 	for (var idx = 0; idx < playerFrames.length; idx++) {
