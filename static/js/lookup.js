@@ -6,10 +6,9 @@ $(function() {
 	$('button').click(function() {
 		playerFrames = [];
 		searchSummoner();
-		drawGraph();
+		//drawGraph();
 	});
 });
-
 
 function drawGraph() {
 	if ($.trim($('svg').html() !== '')) {
@@ -37,9 +36,12 @@ function drawGraph() {
 		}), d3.max(data, function(dataPoint) {
 			return dataPoint.y;
 		})]),
-		xAxis = d3.axisBottom().scale(xRange).tickSize(1),
+		xAxis = d3.axisBottom().ticks(playerFrames.length).scale(xRange),
 		yAxis = d3.axisLeft().scale(yRange);
-		var lineFunction = d3.line().x(function(data) { return xRange(data.x);}).y(function(data) { return yRange(data.y);})
+		var lineFunction = d3.line()
+							.x(function(data) { return xRange(data.x);})
+							.y(function(data) { return yRange(data.y);})
+							.curve(d3.curveCatmullRom);
 
 		//These two lines attach the graph to our HTML document
 		graph.append('svg:g').attr('class', 'x-axis').attr('transform', 'translate(0,' + (HEIGHT - MARGINS.bottom) + ')').call(xAxis);
@@ -64,10 +66,13 @@ function searchSummoner() {
 		data: $('form').serialize(),
 		type: 'POST',
 		success: function(response) {
-			var jsonObj = $.parseJSON(response);
+			/*var jsonObj = $.parseJSON(response);
 			var profileID = jsonObj[summonerName.toLowerCase()].id;
 			$('#response').html('<p>Summoner Information: ' + profileID + '</p>');
-			searchMatches(profileID);
+			searchMatches(profileID);*/
+			console.log('Success');
+			console.log(response);
+			window.location = response;
 		},
 		error: function(error) {
 			errorOutput(error);
