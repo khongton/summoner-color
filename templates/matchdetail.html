@@ -3,11 +3,10 @@
 		<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="static/js/lookup.js"></script>
 	</head>
-	<h2 id="name"></h2>
-	<div id="line">Hello World</div>
+	<h2 id="name">hello world</h2>
+	<div id="line"></div>
 	<script type="text/javascript">
-		var data = {{data|tojson}};
-		$('#name').text('Statistics for ' + data[Object.keys(data)[0]].name);
 	</script>
 </html>

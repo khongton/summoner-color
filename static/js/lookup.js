@@ -2,13 +2,6 @@ var summonerName = '';
 var participantID = null;
 var playerFrames = []
 
-$(function() {
-	$('button').click(function() {
-		playerFrames = [];
-		searchSummoner();
-		//drawGraph();
-	});
-});
 
 function drawGraph() {
 	if ($.trim($('svg').html() !== '')) {
@@ -59,25 +52,22 @@ function formatData() {
 	return data;
 }
 
-function searchSummoner() {
-	summonerName = $('#summoner-name').val();
+function searchSummoner(data) {
+	summonerId = data[Object.keys(data)[0]].id;
+	var jsonId = {'summonerId' : summonerId};
 	$.ajax({
-		url: '/summoner-search',
-		data: $('form').serialize(),
+		url: '/match-search',
+		data: jsonId,
+		contentType: 'application/json;charset=UTF-8',
 		type: 'POST',
 		success: function(response) {
-			/*var jsonObj = $.parseJSON(response);
-			var profileID = jsonObj[summonerName.toLowerCase()].id;
-			$('#response').html('<p>Summoner Information: ' + profileID + '</p>');
-			searchMatches(profileID);*/
-			console.log('Success');
+			console.log('Success');		
 			console.log(response);
-			window.location = response;
 		},
 		error: function(error) {
 			errorOutput(error);
 		}
-	})
+	});
 }
 
 function searchMatches(summonerID) {
