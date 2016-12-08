@@ -3,11 +3,7 @@ import json, requests
 import config
 
 from flask import Flask, render_template, request, json, redirect, url_for, jsonify
-from flask_wtf.csrf import CsrfProtect
-
 app = Flask(__name__)
-csrf = CsrfProtect()
-csrf.init_app(app)
 
 @app.route("/")
 def hello():
@@ -23,13 +19,12 @@ def lookup():
 	url = config.baseurl + config.apis['summoner'] + summonerName + config.apikey
 	response = requests.get(url)
 	summonerID = getSummonerId(response)
-	getMatchHistory(summonerID)
+	history = getMatchHistory(summonerID)
+	print(history)
 	return render_template('matchdetail.html')
 
 @app.route("/match-search", methods=['GET','POST'])
 def matchDetail():
-	for key in request.args:
-		print(request.args.get(key))
 	summonerId = request.args['summonerId'] + '?'
 	url = config.baseurl + config.apis['matchlist'] + summonerId + config.apikey
 	response = requests.get(url)
@@ -41,10 +36,14 @@ def getSummonerId(jsonResp):
 	return jsonObj[nameIdx]['id']
 
 def getMatchHistory(summonerId):
+	matchList = []
 	filterMatchIndices = 'beginIndex=0&endIndex=1&'
 	url = config.baseurl + config.apis['matchlist'] + str(summonerId) + '?'+ filterMatchIndices + config.apikey
 	response = requests.get(url)
-	print(json.loads(response.text)['matches'])
+	jsonObj = json.loads(response.text)
+	for match in jsonObj['matches']:
+		matchList.append(match['matchId'])
+	return matchList
 
 if __name__ == '__main__':
 	app.run()
