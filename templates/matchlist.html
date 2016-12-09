@@ -9,9 +9,4 @@
 		{% block matchlist %}
 		{% endblock %}
 	</div>
-	<script type="text/javascript">
-		var summoner = {{summoner|tojson}};
-		$('#name').text('Recent Match History for ' + summoner[Object.keys(summoner)[0]].name);
-		var matchHistory = {{matchHist|tojson}};
-	</script>
 </html>
