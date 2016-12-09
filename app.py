@@ -3,6 +3,7 @@ import json, requests
 import config
 
 from flask import Flask, render_template, request, json, redirect, url_for, jsonify
+from datetime import datetime
 app = Flask(__name__)
 
 @app.route("/")
@@ -20,7 +21,7 @@ def lookup():
 	response = requests.get(url)
 	summonerID = getSummonerId(response)
 	history = getMatchHistory(summonerID)
-	return render_template('matchlist.html', matchHist = history, summoner = response.json())
+	return render_template('listing.html', matchHist = history, summoner = response.json())
 
 @app.route("/match-search", methods=['GET','POST'])
 def matchDetail():
@@ -31,7 +32,6 @@ def matchDetail():
 
 def getSummonerId(jsonResp):
 	jsonObj = json.loads(jsonResp.text)
-	print(jsonObj)
 	nameIdx = list(jsonObj.keys())[0]
 	return jsonObj[nameIdx]['id']
 
@@ -44,15 +44,9 @@ def getMatchHistory(summonerId):
 	jsonObj = json.loads(response.text)
 	return jsonObj
 
-def getMatchDetail(history):
-	matchDetails = []
-	includeTime = '?includeTimeline=true&'
-	for match in history:
-		url =  config.baseurl + config.apis[matchDetail] + str(match) + includeTime + config.apikey
-		response = requests.get(url)
-		matchDetails.append(json.loads(response.text))
-	return matchDetails
-
+@app.template_filter('localDate')
+def localDate(seconds): #seconds = milliseconds from epoch
+	return datetime.fromtimestamp(seconds / 1e3).strftime('%Y-%m-%d %H:%M:%S')
 
 if __name__ == '__main__':
 	app.run()

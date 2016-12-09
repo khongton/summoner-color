@@ -1,0 +1,8 @@
+{% extends "matchlist.html" %}
+{% block matchlist %}
+{% for idx in range((matchHist['games']|length)) %}
+<div id="match-{{idx + 1}}">Sample Output {{idx}}
+	<p>Game started at: {{matchHist.games[idx].createDate|localDate}}</p>
+</div>
+{% endfor %}
+{% endblock %}
