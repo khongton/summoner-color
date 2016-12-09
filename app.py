@@ -1,4 +1,4 @@
-import sys,os
+import sys,os, time
 import json, requests
 import config
 
@@ -20,8 +20,7 @@ def lookup():
 	response = requests.get(url)
 	summonerID = getSummonerId(response)
 	history = getMatchHistory(summonerID)
-	print(history)
-	return render_template('matchdetail.html')
+	return render_template('matchlist.html', matchHist = history, summoner = response.json())
 
 @app.route("/match-search", methods=['GET','POST'])
 def matchDetail():
@@ -32,18 +31,28 @@ def matchDetail():
 
 def getSummonerId(jsonResp):
 	jsonObj = json.loads(jsonResp.text)
+	print(jsonObj)
 	nameIdx = list(jsonObj.keys())[0]
 	return jsonObj[nameIdx]['id']
 
 def getMatchHistory(summonerId):
-	matchList = []
-	filterMatchIndices = 'beginIndex=0&endIndex=1&'
-	url = config.baseurl + config.apis['matchlist'] + str(summonerId) + '?'+ filterMatchIndices + config.apikey
+	url = config.baseurl + config.apis['recentgames'] + str(summonerId) + '/recent?'+ config.apikey
 	response = requests.get(url)
+	if response.status_code != requests.codes.ok:
+		print('Server might be busy or you exceeded rate limit. Try again later.')
+		sys.exit()
 	jsonObj = json.loads(response.text)
-	for match in jsonObj['matches']:
-		matchList.append(match['matchId'])
-	return matchList
+	return jsonObj
+
+def getMatchDetail(history):
+	matchDetails = []
+	includeTime = '?includeTimeline=true&'
+	for match in history:
+		url =  config.baseurl + config.apis[matchDetail] + str(match) + includeTime + config.apikey
+		response = requests.get(url)
+		matchDetails.append(json.loads(response.text))
+	return matchDetails
+
 
 if __name__ == '__main__':
 	app.run()
