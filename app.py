@@ -1,8 +1,9 @@
-import sys,os, time
+import time
 import json, requests
 import config
 
 from flask import Flask, render_template, request, json, redirect, url_for, jsonify
+from datetime import datetime
 app = Flask(__name__)
 
 @app.route("/")
@@ -20,7 +21,8 @@ def lookup():
 	response = requests.get(url)
 	summonerID = getSummonerId(response)
 	history = getMatchHistory(summonerID)
-	return render_template('matchlist.html', matchHist = history, summoner = response.json())
+	getChampInfo(history['games'])
+	return render_template('listing.html', matchHist = history, summoner = response.json())
 
 @app.route("/match-search", methods=['GET','POST'])
 def matchDetail():
@@ -29,30 +31,31 @@ def matchDetail():
 	response = requests.get(url)
 	return jsonify(response)
 
+@app.route('/match-data/<matchid>')
+def detailPage(matchid):
+	return render_template('detail.html', id = matchid)
+
 def getSummonerId(jsonResp):
 	jsonObj = json.loads(jsonResp.text)
-	print(jsonObj)
 	nameIdx = list(jsonObj.keys())[0]
 	return jsonObj[nameIdx]['id']
 
 def getMatchHistory(summonerId):
 	url = config.baseurl + config.apis['recentgames'] + str(summonerId) + '/recent?'+ config.apikey
 	response = requests.get(url)
-	if response.status_code != requests.codes.ok:
-		print('Server might be busy or you exceeded rate limit. Try again later.')
-		sys.exit()
 	jsonObj = json.loads(response.text)
 	return jsonObj
 
-def getMatchDetail(history):
-	matchDetails = []
-	includeTime = '?includeTimeline=true&'
-	for match in history:
-		url =  config.baseurl + config.apis[matchDetail] + str(match) + includeTime + config.apikey
+def getChampInfo(gameHistory):
+	for match in gameHistory:
+		url = config.staticurl + config.staticapi['champion'] + str(match['championId']) + '?' + config.apikey
 		response = requests.get(url)
-		matchDetails.append(json.loads(response.text))
-	return matchDetails
+		champInfo = json.loads(response.text)
+		match['championId'] = champInfo
 
+@app.template_filter('localDate')
+def localDate(seconds): #seconds = milliseconds from epoch as defined by riot api
+	return datetime.fromtimestamp(seconds / 1e3).strftime('%Y-%m-%d %H:%M:%S')
 
 if __name__ == '__main__':
 	app.run()

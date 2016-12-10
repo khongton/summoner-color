@@ -2,13 +2,13 @@
 	<head>
 		<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://d3js.org/d3.v4.min.js"></script>
 	</head>
-	<h2 id="name"></h2>
-	<div id="line"></div>
-	<script type="text/javascript">
-		var summoner = {{summoner|tojson}};
-		$('#name').text('Match History for ' + summoner[Object.keys(summoner)[0]].name);
-		var history = {{matchHist|tojson}};
-	</script>
+	{% block header %}{% endblock %}
+	<div id="listing">
+		{% block matchlist %}
+		{% endblock %}
+	</div>
 </html>
+<script type="text/javascript">
+	console.log({{matchHist|tojson}})
+</script>

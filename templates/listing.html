@@ -1,0 +1,19 @@
+{% extends "matchlist.html" %}
+{% block header %}
+{% for key in summoner %}
+	<h2 id="name">Match history for {{summoner[key].name}}</h2>
+{% endfor %}
+{% endblock %}
+{% block matchlist %}
+{% for idx in range((matchHist['games']|length)) %}
+<a href="/match-data/{{matchHist.games[idx].gameId}}">
+	<div class='container' id="match-{{idx + 1}}">
+		{% set champion = matchHist.games[idx].championId.name %}
+		<p>Game started at: {{matchHist.games[idx].createDate|localDate}}</p>
+		<p>{{champion}}</p>
+		<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{champion}}.png"/>
+		<p>KDA: {{matchHist.games[idx].stats['championsKilled'] or 0}}/{{matchHist.games[idx].stats['numDeaths'] or 0}}/{{matchHist.games[idx].stats['assists'] or 0}}</p>
+	</div>
+</a>
+{% endfor %}
+{% endblock %}
