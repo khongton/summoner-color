@@ -7,7 +7,10 @@
 {% block matchlist %}
 {% for idx in range((matchHist['games']|length)) %}
 <div id="match-{{idx + 1}}">
+	{% set champion = matchHist.games[idx].championId.name %}
 	<p>Game started at: {{matchHist.games[idx].createDate|localDate}}</p>
+	<p>{{champion}}</p>
+	<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{champion}}.png"/>
 	<p>KDA: {{matchHist.games[idx].stats['championsKilled'] or 0}}/{{matchHist.games[idx].stats['numDeaths'] or 0}}/{{matchHist.games[idx].stats['assists'] or 0}}</p>
 </div>
 {% endfor %}
