@@ -31,6 +31,10 @@ def matchDetail():
 	response = requests.get(url)
 	return jsonify(response)
 
+@app.route('/match-data/<matchid>')
+def detailPage(matchid):
+	return render_template('detail.html', id = matchid)
+
 def getSummonerId(jsonResp):
 	jsonObj = json.loads(jsonResp.text)
 	nameIdx = list(jsonObj.keys())[0]
@@ -48,7 +52,6 @@ def getChampInfo(gameHistory):
 		response = requests.get(url)
 		champInfo = json.loads(response.text)
 		match['championId'] = champInfo
-		time.sleep(1) #to avoid rate limiting while in development
 
 @app.template_filter('localDate')
 def localDate(seconds): #seconds = milliseconds from epoch as defined by riot api
