@@ -1,7 +1,12 @@
 {% extends "matchlist.html" %}
+{% block header %}
+{% for key in summoner %}
+	<h2 id="name">Match history for {{summoner[key].name}}</h2>
+{% endfor %}
+{% endblock %}
 {% block matchlist %}
 {% for idx in range((matchHist['games']|length)) %}
-<div id="match-{{idx + 1}}">Sample Output {{idx}}
+<div id="match-{{idx + 1}}">
 	<p>Game started at: {{matchHist.games[idx].createDate|localDate}}</p>
 </div>
 {% endfor %}
