@@ -1,4 +1,4 @@
-import sys,os, time
+import time
 import json, requests
 import config
 
@@ -21,6 +21,7 @@ def lookup():
 	response = requests.get(url)
 	summonerID = getSummonerId(response)
 	history = getMatchHistory(summonerID)
+	getChampInfo(history['games'])
 	return render_template('listing.html', matchHist = history, summoner = response.json())
 
 @app.route("/match-search", methods=['GET','POST'])
@@ -38,11 +39,16 @@ def getSummonerId(jsonResp):
 def getMatchHistory(summonerId):
 	url = config.baseurl + config.apis['recentgames'] + str(summonerId) + '/recent?'+ config.apikey
 	response = requests.get(url)
-	if response.status_code != requests.codes.ok:
-		print('Server might be busy or you exceeded rate limit. Try again later.')
-		sys.exit()
 	jsonObj = json.loads(response.text)
 	return jsonObj
+
+def getChampInfo(gameHistory):
+	for match in gameHistory:
+		url = config.staticurl + config.staticapi['champion'] + str(match['championId']) + '?' + config.apikey
+		response = requests.get(url)
+		champInfo = json.loads(response.text)
+		match['championId'] = champInfo
+		time.sleep(1) #to avoid rate limiting while in development
 
 @app.template_filter('localDate')
 def localDate(seconds): #seconds = milliseconds from epoch as defined by riot api

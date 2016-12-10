@@ -8,6 +8,7 @@
 {% for idx in range((matchHist['games']|length)) %}
 <div id="match-{{idx + 1}}">
 	<p>Game started at: {{matchHist.games[idx].createDate|localDate}}</p>
+	<p>KDA: {{matchHist.games[idx].stats['championsKilled'] or 0}}/{{matchHist.games[idx].stats['numDeaths'] or 0}}/{{matchHist.games[idx].stats['assists'] or 0}}</p>
 </div>
 {% endfor %}
 {% endblock %}

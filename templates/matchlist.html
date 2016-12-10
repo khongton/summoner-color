@@ -2,12 +2,13 @@
 	<head>
 		<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="static/js/matchlisting.js"></script>
 	</head>
-	<h2 id="name"></h2>
 	{% block header %}{% endblock %}
 	<div id="listing">
 		{% block matchlist %}
 		{% endblock %}
 	</div>
 </html>
+<script type="text/javascript">
+	console.log({{matchHist|tojson}})
+</script>

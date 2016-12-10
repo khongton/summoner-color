@@ -1,8 +1,8 @@
 var summonerName = '';
 var participantID = null;
 var playerFrames = []
-
-
+44102260
+2367177026
 function drawGraph() {
 	if ($.trim($('svg').html() !== '')) {
 		$('svg').empty();
