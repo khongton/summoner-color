@@ -2,8 +2,20 @@
 <head>
 	<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="{{url_for('static', filename='js/matchdata.js')}}"></script>
 </head>
 <div class='container'>
 	<p>Some Champion Data will be put here</p>
 	<p>The data is going to be pulled from this match ID: {{id}}</p>
 </div>
+{% if match %}
+<h3>It printed out successfully</h3>
+<svg id="graph"></svg>
+<script type="text/javascript">
+	var matchHist = {{match|tojson}};
+	console.log({{match|tojson}});
+	parseParticipantFrames({{match|tojson}},{{requestName|tojson}});
+	drawGraph();
+</script>
+{% endif %}
