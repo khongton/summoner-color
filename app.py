@@ -31,9 +31,17 @@ def matchDetail():
 	response = requests.get(url)
 	return jsonify(response)
 
-@app.route('/match-data/<matchid>')
-def detailPage(matchid):
-	return render_template('detail.html', id = matchid)
+@app.route('/match-data/<summoner>/<matchid>')
+def detailPage(matchid, summoner):
+	includeTimeline = '?includeTimeline=true&'
+	url = config.baseurl + config.apis['matchdetail'] + str(matchid) + includeTimeline + config.apikey;
+	response = requests.get(url)
+	print(response)
+	if response.status_code == requests.codes.too_many_requests:
+		print('Underlying service rate limited')
+		return render_template('detail.html', id = matchid)
+	print('Returned with a JSON response')
+	return render_template('detail.html', match = json.loads(response.text), requestName = summoner)
 
 def getSummonerId(jsonResp):
 	jsonObj = json.loads(jsonResp.text)
