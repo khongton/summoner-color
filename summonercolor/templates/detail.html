@@ -1,6 +1,7 @@
 <html lang='en'>
 <head>
 	<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+	<link rel = "stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}"></link>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="{{url_for('static', filename='js/matchdata.js')}}"></script>
@@ -10,7 +11,9 @@
 	<p>The data is going to be pulled from this match ID: {{id}}</p>
 </div>
 {% if match %}
+<div class="center">
 <svg id="graph"></svg>
+</div>
 <script type="text/javascript">
 	var matchHist = {{match|tojson}};
 	console.log({{match|tojson}});
