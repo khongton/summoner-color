@@ -59,7 +59,6 @@ function drawGraph() {
 			.call(xAxis);
 	graph.append("text")
 			.attr('transform', 'translate(' + (WIDTH/2) + ',' +(HEIGHT + MARGINS.top + 20) + ')')
-			.style('text-anchor', 'middle')
 			.text("Time (minutes)");
 	
 	graph.append('g')
