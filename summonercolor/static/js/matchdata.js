@@ -20,21 +20,26 @@ function parseParticipantFrames(matchData, summonerName) {
 
 function drawGraph() {
 	var data = formatData();
-	var graph = d3.select('#graph').attr('width', 1200).attr('height', 600),
-	MARGINS = {
-		top: 20, 
-		right: 20,
-		bottom: 20,
+	//var graph = d3.select('#graph').attr('width', 1200).attr('height', 600),
+	var MARGINS = {
+		top: 10, 
+		right: 50,
+		bottom: 30,
 		left: 50
 	},
-	WIDTH = 1000,
-	HEIGHT = 500,
-	xRange = d3.scaleLinear().range([MARGINS.left * 2, WIDTH]).domain([d3.min(data, function(dataPoint) {
+	WIDTH = 960 - MARGINS.left - MARGINS.right,
+	HEIGHT = 520 - MARGINS.top - MARGINS.bottom,
+	graph = d3.select('#graph')
+			  .attr('width', WIDTH + MARGINS.left + MARGINS.right)
+			  .attr('height', HEIGHT + MARGINS.top + MARGINS.bottom)
+			  .append('g') //this line creates a child element of svg. almost like a matrix transformatio
+			  	.attr('transform', 'translate(' + MARGINS.left + ',' + MARGINS.top + ')'),
+	xRange = d3.scaleLinear().range([0, WIDTH]).domain([d3.min(data, function(dataPoint) {
 		return dataPoint.x;
 	}), d3.max(data, function(dataPoint) {
 		return dataPoint.x;
 	})]),
-	yRange = d3.scaleLinear().range([HEIGHT, MARGINS.bottom]).domain([d3.min(data, function(dataPoint) {
+	yRange = d3.scaleLinear().range([HEIGHT, 0]).domain([d3.min(data, function(dataPoint) {
 		return dataPoint.y;
 	}), d3.max(data, function(dataPoint) {
 		return dataPoint.y;
@@ -47,23 +52,18 @@ function drawGraph() {
 						.x(function(data) { return xRange(data.x);})
 						.y(function(data) { return yRange(data.y);})
 						.curve(d3.curveCatmullRom.alpha(0.5));
-	var focus = graph.append('g')
-					 .attr('class', 'focus')
-					 .style('display', 'none');
-	focus.append('circle').attr('r', 4.5);
-	focus.append('text').attr('x', 9).attr('dy', '.35em');
+
 
 	graph.append('g')
 			.attr('class', 'x axis')
-			.attr('transform', 'translate(0,' + (HEIGHT + MARGINS.bottom - MARGINS.top) + ')')
+			.attr('transform', 'translate(0,' + (HEIGHT) + ')')
 			.call(xAxis);
 	graph.append("text")
-			.attr('transform', 'translate(' + (WIDTH/2) + ',' +(HEIGHT + MARGINS.top + 20) + ')')
+			.attr('transform', 'translate(' + (WIDTH/2) + ',' + HEIGHT + ')')
 			.text("Time (minutes)");
 	
 	graph.append('g')
 			.attr('class', 'y axis')
-			.attr('transform', 'translate(' + (MARGINS.left * 2) +',0)')
 			.call(yAxis);
 	graph.append('svg:text')
 			.attr('transform', 'translate(50' + ',' + ((HEIGHT - MARGINS.bottom)/2) +') rotate(-90)')
@@ -73,7 +73,31 @@ function drawGraph() {
 			.attr('d', lineFunction(data))
 			.attr('stroke', 'blue')
 			.attr('stroke-width', 2)
-			.attr('fill', 'none');
+			.attr('fill', 'none');	
+	var focus = graph.append('g')
+		.attr('class', 'focus')
+		.style('display','none');
+	focus.append('circle').attr('r', 4.5);
+	focus.append('text').attr('x', 9).attr('dy', '.35em');
+
+	graph.append('rect')
+		.attr('class', 'overlay')
+		.attr('width', WIDTH)
+		.attr('height', HEIGHT)
+		.on('mouseover', function() { focus.style('display', null); })
+		.on('mouseout', function() { focus.style('display', 'none'); })
+		.on('mousemove', mouseMove);
+
+	function mouseMove() {
+		var x0 = xRange.invert(d3.mouse(this)[0]),
+			 i = bisectData(data, x0, 1),
+			 d0 = data[i - 1],
+			 d1 = data[i],
+			 d = x0 - d0.x > d1.x - x0 ? d1 : d0;
+		console.log(x0);
+		focus.attr('transform', 'translate(' + xRange(d.x) + ',' + yRange(d.y) +')');
+		focus.select('text').text(d.y);
+	}
 }
 
 function formatData() {
@@ -85,13 +109,3 @@ function formatData() {
 	return data;
 }
 
-function mouseMove() {
-	var x0 = xRange.invert(d3.mouse(this)[0]),
-		 i = bisectData(data, x0, 1),
-		 d0 = data[i - 1],
-		 d1 = data[i],
-		 d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-	focus.attr('transform', 'translate(' + x(d.x) + ',' + y(d.y) +')');
-	console.log(d.y);
-	focus.select('text').text(d.y);
-}
