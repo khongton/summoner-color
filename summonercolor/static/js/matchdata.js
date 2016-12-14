@@ -22,7 +22,7 @@ function drawGraph() {
 	var data = formatData();
 	//var graph = d3.select('#graph').attr('width', 1200).attr('height', 600),
 	var MARGINS = {
-		top: 10, 
+		top: 20, 
 		right: 50,
 		bottom: 30,
 		left: 50
@@ -33,7 +33,7 @@ function drawGraph() {
 			  .attr('width', WIDTH + MARGINS.left + MARGINS.right)
 			  .attr('height', HEIGHT + MARGINS.top + MARGINS.bottom)
 			  .append('g') //this line creates a child element of svg. almost like a matrix transformatio
-			  	.attr('transform', 'translate(' + MARGINS.left + ',' + MARGINS.top + ')'),
+			  	.attr('transform', 'translate(' + MARGINS.left + ',' + MARGINS.top/2 + ')'),
 	xRange = d3.scaleLinear().range([0, WIDTH]).domain([d3.min(data, function(dataPoint) {
 		return dataPoint.x;
 	}), d3.max(data, function(dataPoint) {
@@ -59,14 +59,14 @@ function drawGraph() {
 			.attr('transform', 'translate(0,' + (HEIGHT) + ')')
 			.call(xAxis);
 	graph.append("text")
-			.attr('transform', 'translate(' + (WIDTH/2) + ',' + HEIGHT + ')')
+			.attr('transform', 'translate(' + (WIDTH/2) + ',' + (HEIGHT + MARGINS.top * 2) + ')')
 			.text("Time (minutes)");
 	
 	graph.append('g')
 			.attr('class', 'y axis')
 			.call(yAxis);
 	graph.append('svg:text')
-			.attr('transform', 'translate(50' + ',' + ((HEIGHT - MARGINS.bottom)/2) +') rotate(-90)')
+			.attr('transform', 'translate(' + (MARGINS.left/2) + ',' + (MARGINS.top * 2) +') rotate(-90)')
 			.text("Gold");
 	
 	graph.append('path')
