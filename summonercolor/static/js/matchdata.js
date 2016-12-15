@@ -20,7 +20,6 @@ function parseParticipantFrames(matchData, summonerName) {
 
 function drawGraph() {
 	var data = formatData();
-	//var graph = d3.select('#graph').attr('width', 1200).attr('height', 600),
 	var MARGINS = {
 		top: 20, 
 		right: 50,
@@ -30,10 +29,10 @@ function drawGraph() {
 	WIDTH = 960 - MARGINS.left - MARGINS.right,
 	HEIGHT = 520 - MARGINS.top - MARGINS.bottom,
 	graph = d3.select('#graph')
-			  .attr('width', WIDTH + MARGINS.left + MARGINS.right)
-			  .attr('height', HEIGHT + MARGINS.top + MARGINS.bottom)
-			  .append('g') //this line creates a child element of svg. almost like a matrix transformatio
-			  	.attr('transform', 'translate(' + MARGINS.left + ',' + MARGINS.top/2 + ')'),
+	  .attr('width', WIDTH + MARGINS.left + MARGINS.right)
+	  .attr('height', HEIGHT + MARGINS.top + MARGINS.bottom)
+	  .append('g') //this line creates a child element of svg. almost like a matrix transformatio
+	  	.attr('transform', 'translate(' + MARGINS.left + ',' + MARGINS.top/2 + ')'),
 	xRange = d3.scaleLinear().range([0, WIDTH]).domain([d3.min(data, function(dataPoint) {
 		return dataPoint.x;
 	}), d3.max(data, function(dataPoint) {
@@ -49,31 +48,37 @@ function drawGraph() {
 
 	var bisectData = d3.bisector(function(data) { return data.x}).left; //what am i doing???????
 	var lineFunction = d3.line()
-						.x(function(data) { return xRange(data.x);})
-						.y(function(data) { return yRange(data.y);})
-						.curve(d3.curveCatmullRom.alpha(0.5));
+		.x(function(data) { return xRange(data.x);})
+		.y(function(data) { return yRange(data.y);})
+		.curve(d3.curveCatmullRom.alpha(0.5));
 
 
 	graph.append('g')
-			.attr('class', 'x axis')
-			.attr('transform', 'translate(0,' + (HEIGHT) + ')')
-			.call(xAxis);
+		.attr('class', 'x axis')
+		.attr('transform', 'translate(0,' + (HEIGHT) + ')')
+		.call(xAxis);
 	graph.append("text")
-			.attr('transform', 'translate(' + (WIDTH/2) + ',' + (HEIGHT + MARGINS.top * 2) + ')')
-			.text("Time (minutes)");
+		.attr('transform', 'translate(' + (WIDTH/2) + ',' + (HEIGHT + MARGINS.top * 2) + ')')
+		.style('text-anchor', 'middle')
+		.text("Time (minutes)");
 	
 	graph.append('g')
-			.attr('class', 'y axis')
-			.call(yAxis);
-	graph.append('svg:text')
-			.attr('transform', 'translate(' + (MARGINS.left/2) + ',' + (MARGINS.top * 2) +') rotate(-90)')
-			.text("Gold");
+		.attr('class', 'y axis')
+		.call(yAxis);
+	graph.append('text')
+		.attr('transform', 'translate(' + (MARGINS.left/2) + ',' + (MARGINS.top * 2) +') rotate(-90)')
+		.text("Gold");
 	
+	graph.append('text')
+		.attr('transform', 'translate(' + (WIDTH/2) + ',' + (MARGINS.top/2) + ')')
+		.style('text-anchor', 'middle')
+		.text('Player Gold at Each Minute');
+
 	graph.append('path')
-			.attr('d', lineFunction(data))
-			.attr('stroke', 'blue')
-			.attr('stroke-width', 2)
-			.attr('fill', 'none');	
+		.attr('d', lineFunction(data))
+		.attr('stroke', 'blue')
+		.attr('stroke-width', 2)
+		.attr('fill', 'none');	
 	var focus = graph.append('g')
 		.attr('class', 'focus')
 		.style('display','none');
