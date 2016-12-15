@@ -1,11 +1,8 @@
-<html lang="en">
-	<head>
-		<link rel = "stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	</head>
+{% extends 'base.html' %}
+{% block body %}
 	{% block matchlist %}
 	{% endblock %}
-</html>
-<script type="text/javascript">
-	console.log({{matchHist|tojson}})
-</script>
+	<script type="text/javascript">
+		console.log({{matchHist|tojson}})
+	</script>
+{% endblock %}
