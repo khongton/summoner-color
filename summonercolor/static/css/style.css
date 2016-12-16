@@ -1,5 +1,9 @@
-.title {
+.title, figure figcaption {
 	text-align: center;
+}
+
+figure {
+	display: inline-block;
 }
 
 .overlay {
@@ -7,7 +11,16 @@
 	pointer-events: all;
 }
 
+div.match {
+	margin-bottom: 50px;
+}
+
 .focus circle {
 	fill: none;
 	stroke: steelblue;
+}
+
+svg {
+	display: block;
+	margin: auto;
 }
