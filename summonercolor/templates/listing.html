@@ -2,19 +2,31 @@
 {% block matchlist %}
 {% for key in summoner %}
 	{% set name = summoner[key].name %}
-	<h2 id="name">Match History for {{name}}</h2>
+	<h2 class="title">Match History for {{name}}</h2>
 	{% for match in matchHist.games %}
-	<a href="/match-data/{{name}}/{{match.gameId}}">
-		<div class='container' id="match-{{loop.index}}">
+	<div class="container" id="match-{{loop.index}}">
+		<div class="row match">
+			<a href="/match-data/{{name}}/{{match.gameId}}">
 			{% set champion = match.championId.name %}
-			{% set stats = match.stats %}
-			<p>Game started at: {{match.createDate|localDate}}</p>
-			<p>Game mode: {{match.subType}}</p>
-			<p>{{champion}}</p>
-			<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{champion}}.png"/>
-			<p>KDA: {{stats['championsKilled'] or 0}}/{{stats['numDeaths'] or 0}}/{{stats['assists'] or 0}}</p>
+			{% set stats = match.stats %}			
+				<div class="col-md-3">
+					<figure>
+						<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{champion}}.png"/>
+						<figcaption>{{champion}}</figcaption>
+					</figure>
+				</div>
+				<div class="col-md-3">
+					<p>Game started at {{match.createDate|localDate}}</p>
+				</div>
+				<div class="col-md-3">
+					<p>Game Mode: {{match.subType}}</p>
+				</div>
+				<div class="col-md-3">
+					<p>{{stats['championsKilled'] or 0}}/{{stats['numDeaths'] or 0}}/{{stats['assists'] or 0}}</p>
+				</div>
+			</a>
 		</div>
-	</a>
+	</div>
 	{% endfor %}
 {% endfor %}
 {% endblock %}
