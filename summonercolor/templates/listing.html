@@ -2,26 +2,35 @@
 {% block matchlist %}
 {% for key in summoner %}
 	{% set name = summoner[key].name %}
-	<h2 class="title">Match History for {{name}}</h2>
-	{% for match in matchHist.games %}
-	<div class="container" id="match-{{loop.index}}">
+	<h2 class="center">Match History for {{name}}</h2>
+	<div class="container center" id="headers">
+		<div class="row">
+			<div class="col-md-3">Champion</div>
+			<div class="col-md-3">Game Timestamp</div>
+			<div class="col-md-3">Game Mode</div>
+			<div class="col-md-3">KDA</div>
+		</div>
+	</div>
+	{% for match in matchHist.games %}	
+	{% set champion = match.championId.name %}
+	{% set stats = match.stats %}
+	{% set bgColor = '#66ff66' if match.stats.win else '#ff6666' %}	
+	<div class="container game-overview" id="match-{{loop.index}}" style="background: {{bgColor}}">
 		<div class="row match">
 			<a href="/match-data/{{name}}/{{match.gameId}}">
-			{% set champion = match.championId.name %}
-			{% set stats = match.stats %}			
-				<div class="col-md-3">
+				<div class="col-md-3 game-stats center" >
 					<figure>
 						<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{champion}}.png"/>
-						<figcaption>{{champion}}</figcaption>
+						<figcaption class="center">{{champion}}</figcaption>
 					</figure>
 				</div>
-				<div class="col-md-3">
-					<p>Game started at {{match.createDate|localDate}}</p>
+				<div class="col-md-3 game-stats center">
+					<p>{{match.createDate|localDate}}</p>
 				</div>
-				<div class="col-md-3">
-					<p>Game Mode: {{match.subType}}</p>
+				<div class="col-md-3 game-stats center">
+					<p>{{match.subType}}</p>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 game-stats center">
 					<p>{{stats['championsKilled'] or 0}}/{{stats['numDeaths'] or 0}}/{{stats['assists'] or 0}}</p>
 				</div>
 			</a>
