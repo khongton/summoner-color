@@ -1,10 +1,24 @@
 {% extends 'base.html' %}
 {% block body %}
-<div class="container">
-	<form action="/summoner-search" method="get" role="form">
-		<h2>Enter your summoner name below</h2>
-		<input type="text" id="summoner-name" name="summoner" placeholder="e.g. Doublelift" required autofocus />
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+<div class="container center">
+	<form action="/summoner-search" method="get" role="form" id="player-search">
+		<input class="form-control form-control-inline" type="text" id="summoner-name" name="summoner" placeholder="Enter Summoner Name" required autofocus />
 	</form>
+	<button class="btn btn-primary" form="player-search" type="submit">Search</button>
+</div>
+<div class="container center">	
+	<p>Don't know any Summoners? Try searching these players!</p>
+	<table class="table table-striped table-bordered table-condensed">
+		<tr>
+			<td>Doublelift</td>
+			<td>aphromoo</td>
+			<td>Xpecial</td>
+		</tr>
+		<tr>
+			<td>imaqtpie</td>
+			<td>Lolily</td>
+			<td>Pobelter</td>
+		</tr>
+	</table>
 </div>
 {% endblock %}

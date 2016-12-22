@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% block body %}
 <p>It looks like the Riot API Servers are a little busy.</p>
 <p>Try again in a few moments!</p>
 
 <a href="/match-data/{{summoner}}/{{matchid}}">Reload this page</a>
 <a href="/summoner-search?summoner={{summoner}}">Return to Match Listing</a>
+{% endblock %}
