@@ -5,10 +5,6 @@ import config, json, requests
 def index():
 	return render_template('index.html')
 
-@app.route('/summoner')
-def summonerLookup():
-	return render_template('lookup.html')
-
 @app.route('/summoner-search', methods=['GET', 'POST'])
 def lookup():
 	summonerName = request.args.get('summoner') + '?'
@@ -34,7 +30,7 @@ def detailPage(matchid, summoner):
 	response = requests.get(url)
 	if response.status_code == requests.codes.too_many_requests:
 		print('Underlying service possibly rate limited')
-		return render_template('detail.html', id=matchid)
+		return render_template('429.html', summoner = summoner, matchid = matchid)
 	print('Returned with JSON response')
 	match = json.loads(response.text)
 	return render_template('detail.html', match=match, requestName = summoner)

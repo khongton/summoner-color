@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
 {% block body %}
-<a href="/summoner">Search Summoner</a>
+<div class="container">
+	<form action="/summoner-search" method="get" role="form">
+		<h2>Enter your summoner name below</h2>
+		<input type="text" id="summoner-name" name="summoner" placeholder="e.g. Doublelift" required autofocus />
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+	</form>
+</div>
 {% endblock %}
