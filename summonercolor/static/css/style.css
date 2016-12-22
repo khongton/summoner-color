@@ -1,3 +1,29 @@
+@font-face {
+	font-family: 'Nobile-regular';
+	src: url(../fonts/nobile/Nobile-Regular.ttf);
+}
+
+@font-face {
+	font-family: 'Nevis';
+	src: url(../fonts/nevis/nevis.ttf);
+}
+
+h1 {
+	font-family: 'Nevis', sans-serif;
+}
+
+body {
+	font-family: 'Nobile-regular', sans-serif;
+}
+
+a {
+	color: inherit;
+}
+
+a:hover {
+	color: initial;
+}
+
 .center {
 	text-align: center;
 }
