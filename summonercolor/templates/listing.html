@@ -13,6 +13,7 @@
 	</div>
 	{% for match in matchHist.games %}	
 	{% set champion = match.championId.name %}
+	{% set championImg = match.championId.image.full %}
 	{% set stats = match.stats %}
 	{% set bgColor = '#66ff66' if match.stats.win else '#ff6666' %}	
 	<div class="container game-overview" id="match-{{loop.index}}" style="background: {{bgColor}}">
@@ -20,7 +21,7 @@
 			<a href="/match-data/{{name}}/{{match.gameId}}">
 				<div class="col-md-3 game-stats center" >
 					<figure>
-						<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{champion}}.png"/>
+						<img src="http://ddragon.leagueoflegends.com/cdn/6.24.1/img/champion/{{championImg}}"/>
 						<figcaption class="center">{{champion}}</figcaption>
 					</figure>
 				</div>

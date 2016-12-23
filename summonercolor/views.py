@@ -48,7 +48,7 @@ def getMatchHistory(summonerId):
 
 def getChampInfo(gameHistory):
 	for match in gameHistory:
-		url = config.staticurl + config.staticapi['champion'] + str(match['championId']) + '?' + config.apikey
+		url = config.staticurl + config.staticapi['champion'] + str(match['championId']) + '?champData=image&' + config.apikey
 		response = requests.get(url)
 		champInfo = json.loads(response.text)
 		match['championId'] = champInfo
