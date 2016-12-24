@@ -24,6 +24,12 @@ a:hover {
 	color: initial;
 }
 
+canvas {
+	padding: 0;
+	margin: auto;
+	display: block;
+}
+
 .center {
 	text-align: center;
 }

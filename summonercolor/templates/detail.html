@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
 {% if match %}
-<svg id="graph"></svg>
+<canvas id="chart" width="960" height="500"></canvas>
 <script type="text/javascript">
 	var matchHist = {{match|tojson}};
 	console.log({{match|tojson}});
 	parseParticipantFrames({{match|tojson}},{{requestName|tojson}});
-	drawGraph();
+	drawChart();
 </script>
 {% endif %}
 {% endblock %}
