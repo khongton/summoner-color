@@ -33,14 +33,20 @@ function parseParticipantFrames(matchData, summonerName) {
 
 function drawChart() {
 	var chartElm = document.getElementById('chart');
+	var ctx = chartElm.getContext('2d');
+	var gradient = ctx.createLinearGradient(0, 0, 0, 450);
+
 	var dataset = {
 		labels: gameData.time,
 		datasets: [{
 			label: 'Mochidear',
-			fill: true,
+			backgroundColor: gradient,
+			borderColor: '#000',
+			pointBackgroundColor: '#fff',
+			pointBorderColor: '#000',
 			data: gameData.gold
 		}]
-	}
+	};
 	var options = {
 		title: {
 			display: true,
@@ -75,9 +81,14 @@ function drawChart() {
 				}
 			}]
 		}
-	}
+	};
 
-	var goldChart = new Chart(chartElm, {
+	gradient.addColorStop(1, 'rgba(229, 34, 4, 1)');
+	gradient.addColorStop(0.25, 'rgba(234, 250, 66, 1)');
+	gradient.addColorStop(0.5, 'rgba(234, 250, 66, 1)');
+	gradient.addColorStop(0.75, 'rgba(234, 250, 66, 1)');
+	gradient.addColorStop(0, 'rgba(234, 250, 66, 1)');
+	var goldChart = new Chart(ctx, {
 		type: 'line',
 		data: dataset,
 		options: options
