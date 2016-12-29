@@ -5,7 +5,7 @@
 <script type="text/javascript">
 	var matchHist = {{match|tojson}};
 	console.log({{match|tojson}});
-	parseParticipantFrames({{match|tojson}},{{requestName|tojson}});
+	parseParticipantFrames({{match|tojson}},{{requestName|tojson}}, {{history|tojson}});
 	drawChart();
 </script>
 {% endif %}

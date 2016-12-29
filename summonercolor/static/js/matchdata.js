@@ -6,15 +6,36 @@ var gameData = {
 	gold : []
 }
 
-function parseParticipantFrames(matchData, summonerName) {
+function parseParticipantFrames(matchData, summonerName, history) {
+	console.log(history);
 	var participants = matchData.participantIdentities;
 	var requestID = '';
 
-	//Filter until we find the requested summoner
-	for (player in participants) {
-		if (participants[player].player.summonerName === summonerName) {
-			requestID = participants[player].participantId;
-			break;
+	//We need to determine if the identity is publicly available. If it is, filter through
+	//array until we find the player's participant ID
+	if (typeof participants[0].player !== 'undefined') {
+		for (player in participants) {
+			var curPlayer = participants[player].player.summonerName;
+			if (curPlayer === summonerName) {
+				requestID = participants[player].participantId;
+				break;
+			}
+		}
+	} 
+	else {
+		//We must determine identity based on what champion you are playing.
+		var championId = '';
+		for (game in history.games) {
+			if (matchData.matchId === history.games[game].gameId) {
+				championId = history.games[game].championId.id;
+				break;
+			}
+		}
+		for (player in matchData.participants) {
+			if (matchData.participants[player].championId === championId) {
+				requestID = matchData.participants[player].participantId;
+				break;
+			}
 		}
 	}
 
