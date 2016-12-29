@@ -1,12 +1,15 @@
 from summonercolor import *
 import config, json, requests
 
+history = None
+
 @app.route('/')
 def index():
 	return render_template('index.html')
 
 @app.route('/summoner-search', methods=['GET', 'POST'])
 def lookup():
+	global history
 	summonerName = request.args.get('summoner') + '?'
 	url = config.baseurl + config.apis['summoner'] + summonerName + config.apikey
 	response = requests.get(url)
@@ -33,7 +36,7 @@ def detailPage(matchid, summoner):
 		return render_template('429.html', summoner = summoner, matchid = matchid)
 	print('Returned with JSON response')
 	match = json.loads(response.text)
-	return render_template('detail.html', match=match, requestName = summoner)
+	return render_template('detail.html', match=match, requestName = summoner, history = history)
 
 def getSummonerId(jsonObj):
 	print(jsonObj)

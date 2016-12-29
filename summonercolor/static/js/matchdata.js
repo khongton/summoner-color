@@ -6,15 +6,36 @@ var gameData = {
 	gold : []
 }
 
-function parseParticipantFrames(matchData, summonerName) {
+function parseParticipantFrames(matchData, summonerName, history) {
+	console.log(history);
 	var participants = matchData.participantIdentities;
 	var requestID = '';
 
-	//Filter until we find the requested summoner
-	for (player in participants) {
-		if (participants[player].player.summonerName === summonerName) {
-			requestID = participants[player].participantId;
-			break;
+	//We need to determine if the identity is publicly available. If it is, filter through
+	//array until we find the player's participant ID
+	if (typeof participants[0].player !== 'undefined') {
+		for (player in participants) {
+			var curPlayer = participants[player].player.summonerName;
+			if (curPlayer === summonerName) {
+				requestID = participants[player].participantId;
+				break;
+			}
+		}
+	} 
+	else {
+		//We must determine identity based on what champion you are playing.
+		var championId = '';
+		for (game in history.games) {
+			if (matchData.matchId === history.games[game].gameId) {
+				championId = history.games[game].championId.id;
+				break;
+			}
+		}
+		for (player in matchData.participants) {
+			if (matchData.participants[player].championId === championId) {
+				requestID = matchData.participants[player].participantId;
+				break;
+			}
 		}
 	}
 
@@ -33,14 +54,20 @@ function parseParticipantFrames(matchData, summonerName) {
 
 function drawChart() {
 	var chartElm = document.getElementById('chart');
+	var ctx = chartElm.getContext('2d');
+	var gradient = ctx.createLinearGradient(0, 0, 0, 450);
+
 	var dataset = {
 		labels: gameData.time,
 		datasets: [{
 			label: 'Mochidear',
-			fill: true,
+			backgroundColor: gradient,
+			borderColor: '#000',
+			pointBackgroundColor: '#fff',
+			pointBorderColor: '#000',
 			data: gameData.gold
 		}]
-	}
+	};
 	var options = {
 		title: {
 			display: true,
@@ -75,9 +102,14 @@ function drawChart() {
 				}
 			}]
 		}
-	}
+	};
 
-	var goldChart = new Chart(chartElm, {
+	gradient.addColorStop(1, 'rgba(229, 34, 4, 1)');
+	gradient.addColorStop(0.25, 'rgba(234, 250, 66, 1)');
+	gradient.addColorStop(0.5, 'rgba(234, 250, 66, 1)');
+	gradient.addColorStop(0.75, 'rgba(234, 250, 66, 1)');
+	gradient.addColorStop(0, 'rgba(234, 250, 66, 1)');
+	var goldChart = new Chart(ctx, {
 		type: 'line',
 		data: dataset,
 		options: options
