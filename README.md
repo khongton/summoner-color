@@ -6,4 +6,4 @@ The goal of this web app is to tie together two of my interests: League of Legen
 
 [Link to Web App](http://summonercolor.herokuapp.com/)
 
-Last updated: 12/1/2016 1:58
+Last updated: 1/27/2017 19:15
